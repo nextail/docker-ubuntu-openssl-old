@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1.4
-FROM ubuntu
+# Ubuntu 20.04 LTS (Focal Fossa) Release Build
+FROM ubuntu:focal
 LABEL author="Ruben Suarez <rubensa@gmail.com>"
 
 # Architecture component of TARGETPLATFORM (platform of the build result)
@@ -48,45 +49,6 @@ rm -rf ${OPENSSL_ROOT_1_0}/certs
 ln -s /etc/ssl/certs ${OPENSSL_ROOT_1_0}
 echo "# Configuring OpenSSL 1.0 shared libraries..."
 echo "${OPENSSL_ROOT_1_0}/lib" > /etc/ld.so.conf.d/openssl-1.0.conf
-ldconfig
-EOT
-
-# Ubuntu 22.04 comes with OpenSSL 3.0 and Ruby versions earlier than 3.1 uses OpenSSL 1.1
-# openssl version to install (https://www.openssl.org/source/)
-ARG OPENSSL_VERSION_1_1=1.1.1
-ARG OPENSSL_VERSION_1_1_PATCH=${OPENSSL_VERSION_1_1}w
-
-# openssl installation directory
-ENV OPENSSL_ROOT_1_1=/opt/openssl-1.1
-
-# Install OpenSSL 1.1
-ADD patches/${OPENSSL_VERSION_1_1_PATCH}/ /tmp/openssl-patches/${OPENSSL_VERSION_1_1_PATCH}
-RUN <<EOT
-echo "# Installing OpenSSL 1.1..."
-curl -o /tmp/openssl-${OPENSSL_VERSION_1_1_PATCH}.tar.gz -sSL https://www.openssl.org/source/openssl-${OPENSSL_VERSION_1_1_PATCH}.tar.gz
-mkdir -p ${OPENSSL_ROOT_1_1}
-mkdir -p /tmp/openssl-${OPENSSL_VERSION_1_1_PATCH}
-tar xzf /tmp/openssl-${OPENSSL_VERSION_1_1_PATCH}.tar.gz -C /tmp/openssl-${OPENSSL_VERSION_1_1_PATCH} --strip-components=1
-# Patches needed to avoid "libssl.so.1.1.0: no version information available"
-# adapted from: https://launchpad.net/ubuntu/+source/openssl
-echo "# Patching OpenSSL 1.1..."
-find /tmp/openssl-patches/${OPENSSL_VERSION_1_1_PATCH} -type f -name '*.patch' -print0 | sort -z | xargs -t -0 -n 1 patch -d /tmp/openssl-${OPENSSL_VERSION_1_1_PATCH} -p1 -i
-echo "# Building OpenSSL 1.1..."
-cd /tmp/openssl-${OPENSSL_VERSION_1_1_PATCH}
-./config --prefix=${OPENSSL_ROOT_1_1} --openssldir=${OPENSSL_ROOT_1_1} shared zlib
-make
-echo "# Installing OpenSSL 1.1..."
-make install
-cd
-echo "# Cleaning OpenSSL 1.1..."
-rm -rf /tmp/openssl-${OPENSSL_VERSION_1_1_PATCH}
-rm /tmp/openssl-${OPENSSL_VERSION_1_1_PATCH}.tar.gz
-rm -rf /tmp/openssl-patches
-echo "# Linking system certs to OpenSSL 1.1..."
-rm -rf ${OPENSSL_ROOT_1_1}/certs
-ln -s /etc/ssl/certs ${OPENSSL_ROOT_1_1}
-echo "# Configuring OpenSSL 1.0 shared libraries..."
-echo "${OPENSSL_ROOT_1_1}/lib" > /etc/ld.so.conf.d/openssl-1.1.conf
 ldconfig
 EOT
 
