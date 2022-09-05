@@ -9,7 +9,7 @@ You can build the image like this:
 ```
 #!/usr/bin/env bash
 
-DOCKER_REPOSITORY_NAME="rubensa"
+DOCKER_REPOSITORY_NAME="nextail"
 DOCKER_IMAGE_NAME="ubuntu-openssl-old"
 DOCKER_IMAGE_TAG="18.04"
 
