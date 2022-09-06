@@ -9,12 +9,16 @@ You can build the image like this:
 ```
 #!/usr/bin/env bash
 
+DOCKER_REPOSITORY_NAME="rubensa"
+DOCKER_IMAGE_NAME="ubuntu-openssl-old"
+DOCKER_IMAGE_TAG="latest"
+
 docker buildx build --platform=linux/amd64,linux/arm64 --no-cache \
-	-t "rubensa/ubuntu-openssl-old" \
-	--label "maintainer=Ruben Suarez <rubensa@gmail.com>" \
-	.
+  -t "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" \
+  --label "maintainer=Ruben Suarez <rubensa@gmail.com>" \
+  .
 
 docker buildx build --load \
-	-t "rubensa/ubuntu-openssl-old" \
-	.
+  -t "${DOCKER_REPOSITORY_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" \
+  .
 ```
