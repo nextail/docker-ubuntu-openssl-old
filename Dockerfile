@@ -32,7 +32,7 @@ RUN curl -o /tmp/openssl-${OPENSSL_VERSION_1_0_PATCH}.tar.gz -sSL https://www.op
 # Ubuntu 22.04 comes with OpenSSL 3.0 and Ruby versions earlier than 3.1 used OpenSSL 1.1
 # openssl version to install (https://www.openssl.org/source/)
 ARG OPENSSL_VERSION_1_1=1.1.1
-ARG OPENSSL_VERSION_1_1_PATCH=${OPENSSL_VERSION_1_1}t
+ARG OPENSSL_VERSION_1_1_PATCH=${OPENSSL_VERSION_1_1}v
 
 # openssl installation directory
 ENV OPENSSL_ROOT_1_1=/opt/openssl-1.1
