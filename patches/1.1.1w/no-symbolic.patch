@@ -1,0 +1,11 @@
+--- openssl-1.1.1w.orig/Configurations/shared-info.pl	2023-09-11 16:08:11.000000000 +0200
++++ openssl-1.1.1w/Configurations/shared-info.pl	2024-10-08 16:44:10.448642011 +0200
+@@ -25,7 +25,7 @@
+ my %shared_info;
+ %shared_info = (
+     'gnu-shared' => {
+-        shared_ldflag         => '-shared -Wl,-Bsymbolic',
++        shared_ldflag         => '-shared',
+         shared_sonameflag     => '-Wl,-soname=',
+     },
+     'linux-shared' => sub {
